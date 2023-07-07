@@ -1,0 +1,2 @@
+# cloudformation-terraform-backend
+このリポジトリには、Terraformのステートを管理するためのS3バケットとDynamoDBテーブルをAWS上にデプロイするためのAWS CloudFormationテンプレートが含まれています。
