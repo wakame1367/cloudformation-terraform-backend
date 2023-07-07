@@ -19,14 +19,19 @@
 AWS CLIを使用して、以下のコマンドを実行します:
 
 ```bash
-aws cloudformation create-stack --stack-name {your-stack-name} --template-body file://path/to/your/template.yaml
+export STACK_NAME={your-stack-name}
+export RESOURCE_PREFIX={your-resource-prefix}
+```
+
+```bash
+aws cloudformation create-stack --stack-name $STACK_NAME --template-body file://path/to/your/template.yaml --parameters ParameterKey=ResourceNamePrefix,ParameterValue=$RESOURCE_PREFIX
 ```
 
 ここで、`{your-stack-name}`を任意のスタック名に、path/to/your/template.yamlを実際のテンプレートファイルのパスに置き換えます。
 デプロイのステータスを確認するために、以下のコマンドを実行します:
 
 ```bash
-aws cloudformation describe-stacks --stack-name {your-stack-name}
+aws cloudformation describe-stacks --stack-name $STACK_NAME
 ```
 
 このコマンドはスタックの状態を表示します。"CREATE_COMPLETE"が表示されればデプロイが成功しています。
