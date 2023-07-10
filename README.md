@@ -2,14 +2,45 @@
 
 このリポジトリはTerraformのステートファイルを格納し、ステートのロックを制御するためのAWSのS3バケットとDynamoDBテーブルを作成するためのAWS CloudFormationテンプレートを含みます。テーブルとバケットはTerraformのステートを安全に管理するために使用されます。
 
-## デプロイ方法
-
 ## デプロイ前の確認事項
 
 AWS Management ConsoleおよびAWS CLIを使ったデプロイ方法を次の権限が、デプロイに利用するIAMユーザかロールに付与されているか確認してください。
 
 - S3 バケットを作成するには `s3:CreateBucket` の権限
 - DynamoDB テーブルを作成するには `dynamodb:CreateTable` の権限
+
+## 引数で渡すパラメータ(`ResourceNamePrefix`)について
+
+パラメータはS3バケット名、DynamoDBのテーブル名それぞれのPrefixとなっております。以下に例を挙げます。
+これらはこのCloudFormationが正常に実行されると生成されるAWSリソースの名前になります。
+
+- S3バケット名
+  - `${ResourceNamePrefix}-${AWS::AccountId}-terraform-state`
+    - バケット名をグローバルでユニークにするためにAccountIdを付与するようにしています
+  - 例: servicename-staging-XXXXXXXXX-terraform-state
+- DynamoDBのテーブル名
+  - `${ResourceNamePrefix}-terraform-lock`
+  - 例: servicename-staging-terraform-lock
+
+## Terraform側のbackendの設定値について
+
+またCloudFormation実行後に作成されたS3バケットとDynamoDBのテーブルはterraformのbackend、bucket、dynamodb_tableにそれぞれ対応する値として設定します。
+
+- `{your-s3-bucket-name}`
+- `{dynamodb_table_name}`
+
+```terraform
+terraform {
+  backend "s3" {
+    bucket         = "{your-s3-bucket-name}"
+    key            = "dev/terraform.tfstate"  # 開発環境用
+    region         = "us-west-2"
+    encrypt        = true
+    dynamodb_table = "{dynamodb_table_name}"
+  }
+}
+```
+## デプロイ方法
 
 ### AWS Management Consoleからデプロイ
 
