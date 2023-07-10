@@ -4,6 +4,13 @@
 
 ## デプロイ方法
 
+## デプロイ前の確認事項
+
+AWS Management ConsoleおよびAWS CLIを使ったデプロイ方法を次の権限が、デプロイに利用するIAMユーザかロールに付与されているか確認してください。
+
+- S3 バケットを作成するには `s3:CreateBucket` の権限
+- DynamoDB テーブルを作成するには `dynamodb:CreateTable` の権限
+
 ### AWS Management Consoleからデプロイ
 
 1. AWS Management Consoleにログインします。
